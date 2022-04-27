@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
         let comments = await Comment.find();
         if (!comments)
             return res.status(400).send(`No comments in this collection.`);
-        return res.status(200).send(products);
+        return res.status(200).send(comments);
     } catch (error) {
         return res.status(500).send(`Internal Server Error: ${error}`);
     }
