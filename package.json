@@ -1,0 +1,29 @@
+{
+  "name": "youtube-clone-backend",
+  "version": "1.0.0",
+  "description": "A mockup of a YouTube-type application that implements React, Node, Express, MongoDB/Mongoose, HTML, and CSS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dis-guisekaylee/dcc-ytclone-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dis-guisekaylee/dcc-ytclone-backend/issues"
+  },
+  "homepage": "https://github.com/dis-guisekaylee/dcc-ytclone-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "joi": "^17.6.0",
+    "mongoose": "^6.3.1",
+    "nodemon": "^2.0.15"
+  }
+}
