@@ -10,6 +10,16 @@ const replySchema = new mongoose.Schema({
 // Model
 const Reply = mongoose.model("Reply", replySchema);
 
+
+// Validate
+function validateReply(reply) {
+    const schema = Joi.object({
+        text: Joi.string().min(2).max(50).required(),
+    });
+    return schema.validate(reply);
+}
+
 // Exports
 exports.replySchema = replySchema;
 exports.Reply = Reply;
+exports.validateReply = validateReply;

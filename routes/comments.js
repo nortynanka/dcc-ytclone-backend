@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Comment = require("../models/comment");
-const validateComment = require("../middleware/validateComment");
-const { Reply, validateReply } = require("../models/reply");
+const { Comment, validateComment } = require("../models/comment");
 
 // ! GET ALL COMMENTS (10 min)
 // http://localhost:3003/api/comments
@@ -18,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // ! GET A COMMENT BY ID (10 min)
-// http://localhost:3003/api/comments/:id
+// http://localhost:3003/api/comments/:commentid
 router.get("/:commentId", async (req, res) => {
   try {
     let comment = await Comment.findById(req.params.commentId);
@@ -33,7 +31,7 @@ router.get("/:commentId", async (req, res) => {
 });
 
 // ! POST NEW COMMENT TO COMMENTS (20-30 min)
-// http://localhost:3003/api/comments/
+// http://localhost:3003/api/comments/:videoid
 router.post("/", async (req, res) => {
   try {
     const { error } = validateComment(req.body);
@@ -49,10 +47,10 @@ router.post("/", async (req, res) => {
 });
 
 // ! UPDATE AN EXISTING LIKES / DISLIKES FOR COMMENT BY ID (20-30 min)
-// http://localhost:3003/api/comments/:id
+// http://localhost:3003/api/comments/:commentid
 
 // ! DELETE A COMMENT BY ID (10 min)
-// http://localhost:3003/api/comments/:id
+// http://localhost:3003/api/comments/:commentid
 
 // ! POST NEW REPLY TO COMMENT BY COMMENT ID (30-40 min)
 // http://localhost:3003/api/comments/:commentid
