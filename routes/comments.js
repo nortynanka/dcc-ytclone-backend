@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Comment, validateComment } = require("../models/comment");
+const { Reply, validateReply } = require("../models/reply");
 
 // ! GET ALL COMMENTS (10 min)
 // http://localhost:3003/api/comments
@@ -30,6 +31,19 @@ router.get("/:commentId", async (req, res) => {
   }
 });
 
+router.get("/findbyvid/:videoId", async (req, res) => {
+  try {
+    let comments = await Comment.find({videoID:req.params.videoId});
+    if (!comments)
+      return res
+        .status(400)
+        .send(`Video with ID ${req.params.videoId} has no comments!`);
+    return res.status(200).send(comments);
+  } catch (error) {
+    return res.status(500).send(`Internal Server Error: ${error}`);
+  }
+});
+
 // ! POST NEW COMMENT TO COMMENTS (20-30 min)
 // http://localhost:3003/api/comments
 router.post("/", async (req, res) => {
@@ -39,8 +53,10 @@ router.post("/", async (req, res) => {
 
     let newComment = await new Comment(req.body);
     await newComment.save();
+    
+    let comments = await Comment.find();
+    return res.status(201).send(comments);
 
-    return res.status(201).send(newComment);
   } catch (error) {
     return res.status(500).send(`Internal Server Error: ${error}`);
   }
@@ -53,7 +69,7 @@ router.put("/:commentId", async (req, res) => {
     const { error } = validateComment(req.body);
     if (error) return res.status(400).send(error);
     let comment = await Comment.findByIdAndUpdate(
-      req.params.productId,
+      req.params.commentId,
       req.body,
       { new: true }
     );
@@ -83,16 +99,25 @@ router.delete("/:commentId", async (req, res) => {
 });
 
 // ! POST NEW REPLY TO COMMENT BY COMMENT ID (30-40 min)
-// http://localhost:3003/api/comments/:commentid
-router.post("/:commentId", async (req, res) => {
+// http://localhost:3003/api/comments/:commentid/replies
+router.post("/:commentId/replies", async (req, res) => {
   try {
+
     const { error } = validateReply(req.body);
     if (error) return res.status(400).send(error);
 
-    let newReply = await new Reply(req.body);
-    await newReply.save();
+    let comment = await Comment.findById(req.params.commentId);
+    if (!comment)
+      return res
+        .status(400)
+        .send(`Comment with ID ${req.params.commentId} does not exist!`);
+    if (error) return res.status(400).send(error);
 
-    return res.status(201).send(newReply);
+    const newReply = await new Reply(req.body);
+    comment.replies.push(newReply);
+    await comment.save();
+
+    return res.status(201).send([newReply, comment]);
   } catch (error) {
     return res.status(500).send(`Internal Server Error: ${error}`);
   }
